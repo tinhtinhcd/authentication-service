@@ -40,7 +40,6 @@ public class OAuth2AuthorizationServerConfigJwt extends AuthorizationServerConfi
                 .authorizedGrantTypes("password", "refresh_token")
                 .accessTokenValiditySeconds(jwtConfig.getExpiration())
                 .refreshTokenValiditySeconds(jwtConfig.getExpiration());
-
     }
 
     @Override
