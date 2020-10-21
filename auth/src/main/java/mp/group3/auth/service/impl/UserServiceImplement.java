@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -18,6 +18,12 @@ import java.util.Set;
 public class UserServiceImplement implements UserService {
 
     UserRepository userRepository;
+    public PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
@@ -41,5 +47,13 @@ public class UserServiceImplement implements UserService {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
         });
         return authorities;
+    }
+
+    public User createTestUser() {
+        User newUser = new User();
+        newUser.setUsername("admin");
+        newUser.setPassword(passwordEncoder.encode("123456"));
+        userRepository.saveAndFlush(newUser);
+        return newUser;
     }
 }
