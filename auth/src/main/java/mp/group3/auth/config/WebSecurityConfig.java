@@ -2,6 +2,7 @@ package mp.group3.auth.config;
 
 import mp.group3.auth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.userService = userService;
     }
 
-    @Bean
+    @Bean(name = "bCryptPasswordEncoder")
     public BCryptPasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }

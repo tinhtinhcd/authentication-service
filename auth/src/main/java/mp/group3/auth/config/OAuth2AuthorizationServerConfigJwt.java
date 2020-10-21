@@ -23,8 +23,13 @@ public class OAuth2AuthorizationServerConfigJwt extends AuthorizationServerConfi
 
     private JwtConfig jwtConfig;
     private AuthenticationManager authenticationManager;
-    @Autowired
     private BCryptPasswordEncoder encoder;
+
+    @Autowired
+    @Qualifier("bCryptPasswordEncoder")
+    public void setEncoder(BCryptPasswordEncoder encoder) {
+        this.encoder = encoder;
+    }
 
     @Autowired
     public void setJwtConfig(JwtConfig jwtConfig) {
