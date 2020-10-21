@@ -16,7 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Privilege extends BaseModel{
-
     String url;
     String name;
 }

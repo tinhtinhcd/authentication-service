@@ -46,4 +46,5 @@ public class AuthenticationController {
     public ResponseEntity<?> createTestUser() throws Exception {
         return ResponseEntity.ok(userService.createTestUser());
     }
+
 }
