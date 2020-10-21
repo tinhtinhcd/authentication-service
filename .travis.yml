@@ -1,5 +1,9 @@
 language: java
-scritp: cd auth mvn clean install
+scritp: 
+  - cd auth 
+  - mvn clean install
+before-deploy:
+  - cd ./auth
 deploy:
   - provider: heroku
     api_key:
