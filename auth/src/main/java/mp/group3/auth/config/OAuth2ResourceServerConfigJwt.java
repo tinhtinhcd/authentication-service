@@ -14,7 +14,7 @@ public class OAuth2ResourceServerConfigJwt extends ResourceServerConfigurerAdapt
         http.antMatcher("/**")
                 .authorizeRequests()
                 .antMatchers("/admin/**")
-                .access("hasAnyRole('ADMIN','ADMIN_PROFILE','ADMIN_POST','ADMIN_ADV')")
+                .access("hasAnyRole('ADMIN')")
                 .and().exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
     }
 }
