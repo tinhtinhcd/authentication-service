@@ -8,7 +8,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -44,15 +43,19 @@ public class UserServiceImplement implements UserService {
         Set authorities = new HashSet();
         user.getRoles().forEach(role -> {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
+            role.getPrivileges().forEach(pr->{
+                authorities.add(new SimpleGrantedAuthority("PRIVILEGE_" + pr.getName()));
+            });
         });
         return authorities;
     }
 
-    public User createTestUser() {
-        User newUser = new User();
-        newUser.setUsername("admin");
-        newUser.setPassword(passwordEncoder.encode("123456"));
-        userRepository.saveAndFlush(newUser);
-        return newUser;
+    public User findByUsername(String username) {
+        return userRepository.findUsersByUsername(username).get();
+    }
+
+    @Override
+    public User getUSerById(long id) {
+        return userRepository.findById(id).get();
     }
 }

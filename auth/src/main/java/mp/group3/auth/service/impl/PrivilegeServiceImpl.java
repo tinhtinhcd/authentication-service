@@ -23,9 +23,4 @@ public class PrivilegeServiceImpl implements PrivilegeService {
         return privilegeRepository.findAll();
     }
 
-    @Override
-    public List<Privilege> getByRole(Long id) {
-        return privilegeRepository.findAllByRolesIs(id);
-    }
-
 }

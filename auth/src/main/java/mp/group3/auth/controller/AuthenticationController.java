@@ -5,6 +5,7 @@ import mp.group3.auth.dto.JwtResponse;
 import mp.group3.auth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -37,14 +38,11 @@ public class AuthenticationController {
         return ResponseEntity.ok("test");
     }
 
-    @RequestMapping(value = "/api/test", method = RequestMethod.GET)
-    public ResponseEntity<?> testAPI(Principal principal) throws Exception {
-        return ResponseEntity.ok(principal.getName());
+    @RequestMapping(value = "/api/user/{id}", method = RequestMethod.GET)
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ADMIN')")
+    public ResponseEntity<?> getLoginUser(@PathVariable long id) throws Exception {
+        return ResponseEntity.ok(userService.getUSerById(id));
     }
 
-    @RequestMapping(value = "/createUser", method = RequestMethod.GET)
-    public ResponseEntity<?> createTestUser() throws Exception {
-        return ResponseEntity.ok(userService.createTestUser());
-    }
 
 }

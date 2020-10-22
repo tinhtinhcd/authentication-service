@@ -6,5 +6,4 @@ import java.util.List;
 
 public interface PrivilegeService {
     public List<Privilege> getAll();
-    public List<Privilege> getByRole(Long id);
 }

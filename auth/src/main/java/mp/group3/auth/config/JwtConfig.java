@@ -10,9 +10,6 @@ import org.springframework.stereotype.Component;
 @Data
 public class JwtConfig {
 
-    @Value("${security.jwt.uri}")
-    private String Uri;
-
     @Value("${security.jwt.header}")
     private String header;
 

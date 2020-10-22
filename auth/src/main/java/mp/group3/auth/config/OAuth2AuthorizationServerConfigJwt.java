@@ -13,9 +13,12 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableAuthorizationServer
@@ -24,6 +27,12 @@ public class OAuth2AuthorizationServerConfigJwt extends AuthorizationServerConfi
     private JwtConfig jwtConfig;
     private AuthenticationManager authenticationManager;
     private BCryptPasswordEncoder encoder;
+    private CustomTokenEnhancer customTokenEnhancer;
+
+    @Autowired
+    public void setCustomTokenEnhancer(CustomTokenEnhancer customTokenEnhancer) {
+        this.customTokenEnhancer = customTokenEnhancer;
+    }
 
     @Autowired
     @Qualifier("bCryptPasswordEncoder")
@@ -50,7 +59,6 @@ public class OAuth2AuthorizationServerConfigJwt extends AuthorizationServerConfi
                 .authorizedGrantTypes("password", "refresh_token")
                 .accessTokenValiditySeconds(jwtConfig.getExpiration())
                 .refreshTokenValiditySeconds(jwtConfig.getExpiration());
-
     }
 
     @Override
@@ -61,7 +69,10 @@ public class OAuth2AuthorizationServerConfigJwt extends AuthorizationServerConfi
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints)
             throws Exception {
+        TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
+        tokenEnhancerChain.setTokenEnhancers(Arrays.asList(customTokenEnhancer, accessTokenConverter()));
         endpoints.tokenStore(tokenStore())
+                .tokenEnhancer(tokenEnhancerChain)
                 .accessTokenConverter(accessTokenConverter())
                 .authenticationManager(authenticationManager);
     }

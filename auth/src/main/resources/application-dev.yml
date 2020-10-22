@@ -1,0 +1,25 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: auth-service
+  server:
+    port: 8080
+  datasource:
+    url: jdbc:mysql://db4free.net:3306/pmproject
+    username: projectpmgroup3
+    password: 12345678
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform : org.hibernate.dialect.MySQL8Dialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto : update
+    open-in-view: false
+  security:
+    oauth2:
+      client:
+        provider:
+          custom-provider:
+            user-info-url: /api/getLoginUser
+
