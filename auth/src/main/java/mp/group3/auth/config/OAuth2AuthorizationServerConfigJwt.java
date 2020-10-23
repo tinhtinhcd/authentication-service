@@ -24,7 +24,7 @@ import java.util.Arrays;
 @EnableAuthorizationServer
 public class OAuth2AuthorizationServerConfigJwt extends AuthorizationServerConfigurerAdapter {
 
-    private JwtConfig jwtConfig;
+    private ConfigValue jwtConfig;
     private AuthenticationManager authenticationManager;
     private BCryptPasswordEncoder encoder;
     private CustomTokenEnhancer customTokenEnhancer;
@@ -41,7 +41,7 @@ public class OAuth2AuthorizationServerConfigJwt extends AuthorizationServerConfi
     }
 
     @Autowired
-    public void setJwtConfig(JwtConfig jwtConfig) {
+    public void setJwtConfig(ConfigValue jwtConfig) {
         this.jwtConfig = jwtConfig;
     }
 

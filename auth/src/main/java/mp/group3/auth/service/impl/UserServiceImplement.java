@@ -1,42 +1,59 @@
 package mp.group3.auth.service.impl;
 
+import mp.group3.auth.config.ConfigValue;
 import mp.group3.auth.entity.User;
-import mp.group3.auth.repository.UserRepository;
 import mp.group3.auth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
+@Service
 public class UserServiceImplement implements UserService {
 
-    UserRepository userRepository;
     public PasswordEncoder passwordEncoder;
+    private User user;
+    private ConfigValue configValue;
+    private RestTemplate restTemplate;
+
+    @Autowired
+    public void setConfigValue(ConfigValue configValue) {
+        this.configValue = configValue;
+    }
+
+    @Autowired
+    public void setRestTemplate(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     @Autowired
     public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    @Override
+    public UserDetails loadUserByUsername(String userName) {
+        User user = findByUsername(userName);
+        if (user == null || user.getId() == null || user.getUsername() == null) {
+            throw new UsernameNotFoundException(userName);
+        }
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+                getAuthority(user));
     }
 
     @Override
-    public UserDetails loadUserByUsername(String userName) {
-        Optional<User> user = userRepository.findUsersByUsername(userName);
-        if (!user.isPresent()) {
-            throw new UsernameNotFoundException(userName);
-        }
-        User u = user.get();
-        return new org.springframework.security.core.userdetails.User(u.getUsername(), u.getPassword(),
-                getAuthority(user.get()));
+    public User findByUsername(String name) {
+        if(user == null)
+            user =  restTemplate.getForObject(configValue.getUserUrl()+"/"+name, User.class);
+        return user;
     }
 
     private Set getAuthority(User user) {
@@ -50,12 +67,4 @@ public class UserServiceImplement implements UserService {
         return authorities;
     }
 
-    public User findByUsername(String username) {
-        return userRepository.findUsersByUsername(username).get();
-    }
-
-    @Override
-    public User getUSerById(long id) {
-        return userRepository.findById(id).get();
-    }
 }

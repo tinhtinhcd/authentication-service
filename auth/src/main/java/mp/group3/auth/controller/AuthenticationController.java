@@ -38,11 +38,4 @@ public class AuthenticationController {
         return ResponseEntity.ok("test");
     }
 
-    @RequestMapping(value = "/api/user/{id}", method = RequestMethod.GET)
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ADMIN')")
-    public ResponseEntity<?> getLoginUser(@PathVariable long id) throws Exception {
-        return ResponseEntity.ok(userService.getUSerById(id));
-    }
-
-
 }

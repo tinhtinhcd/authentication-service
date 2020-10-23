@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @ToString
 @Component
 @Data
-public class JwtConfig {
+public class ConfigValue {
 
     @Value("${security.jwt.header}")
     private String header;
@@ -24,5 +24,8 @@ public class JwtConfig {
 
     @Value("${security.jwt.client}")
     private String client;
+
+    @Value("${url.user}")
+    private String userUrl;
 
 }

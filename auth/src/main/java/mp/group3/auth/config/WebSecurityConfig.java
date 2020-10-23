@@ -1,5 +1,6 @@
 package mp.group3.auth.config;
 
+import mp.group3.auth.service.UserService;
 import mp.group3.auth.service.impl.UserServiceImplement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -28,11 +29,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 )
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Override
-    @Bean
-    public UserDetailsService userDetailsServiceBean() throws Exception {
-        return new UserServiceImplement();
-    }
+    @Autowired
+    private UserService userService;
 
     @Bean(name = "bCryptPasswordEncoder")
     public BCryptPasswordEncoder encoder() {
@@ -42,13 +40,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     @Autowired
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsServiceBean()).passwordEncoder(encoder());
+        auth.userDetailsService(userService).passwordEncoder(encoder());
     }
 
     @Autowired
     public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsServiceBean())
-                .passwordEncoder(encoder());
+        auth.userDetailsService(userService).passwordEncoder(encoder());
     }
 
     @Override
