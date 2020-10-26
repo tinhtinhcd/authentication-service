@@ -9,4 +9,5 @@ import org.springframework.stereotype.Service;
 public interface UserService extends UserDetailsService {
     UserDetails loadUserByUsername(String userName);
     User findByUsername(String name);
+//    User testApi(String username, String token);
 }

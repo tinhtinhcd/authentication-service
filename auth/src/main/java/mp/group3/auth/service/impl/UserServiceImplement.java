@@ -12,15 +12,17 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriTemplateHandler;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Service
 public class UserServiceImplement implements UserService {
 
     public PasswordEncoder passwordEncoder;
-    private User user;
     private ConfigValue configValue;
     private RestTemplate restTemplate;
 
@@ -51,9 +53,7 @@ public class UserServiceImplement implements UserService {
 
     @Override
     public User findByUsername(String name) {
-        if(user == null)
-            user =  restTemplate.getForObject(configValue.getUserUrl()+"/"+name, User.class);
-        return user;
+        return restTemplate.getForObject(configValue.getUserUrl()+"/user/"+name, User.class);
     }
 
     private Set getAuthority(User user) {
@@ -66,5 +66,12 @@ public class UserServiceImplement implements UserService {
         });
         return authorities;
     }
+
+//    public User testApi(String username, String token){
+//        UriTemplateHandler url = restTemplate.getUriTemplateHandler();
+//        url.expand("Authorization", token);
+//        User test = restTemplate.getForObject(configValue.getUserUrl()+"/user/"+username, User.class);
+//        return test;
+//    }
 
 }
